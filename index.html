@@ -93,54 +93,82 @@
             
         }
         
-        function Timer(fn_tick,tickLength){
+        
+        var monthNames = [ "januari", "februari", "mars", "april", "maj", "juni", "juli", "augusti", "september", "oktober", "november", "december" ];
+
+
+        function checkTime(i)
+        {
+            if (i<10)
+            {
+                i="0" + i;
+            }
+            return i;
+        }
+        
+        function GetClock()
+        {
+            var today=new Date();
+            var h=today.getHours();
+            var m=today.getMinutes();
+            
+            $("#clock").text(checkTime(h)+':'+checkTime(m));
+            $("#date").text(today.getDate() +' '+ monthNames[today.getMonth()]);
+
+        }
+        
+        function Timer(fn_tick, tickLength) {
             return {
-                timer:this.timer,
-                started:false,
-                start: function(){
-                   if(!this.started){
-                       var self = this;
-                       this.started = true;
-                       this.timer = setInterval(fn_tick, tickLength);
-                       return this;                
-                   }
-                },
-                stop: function(){
-                   if(this.started){
-                       clearInterval(this.timer);
-                       this.started = false;                
+                timer: this.timer,
+                started: false,
+                start: function() {
+                    if (!this.started) {
+                        var self = this;
+                        this.started = true;
+                        this.timer = setInterval(fn_tick, tickLength);
+                        return this;
                     }
-                    
+                },
+        
+                stop: function() {
+                    if (this.started) {
+                        clearInterval(this.timer);
+                        this.started = false;
+                    }
                     return this;
                 }
             }
         }
+
 		
 		$(function(){
-			Timer(GetWeather(),1800);
-			
-			
+			var weatherTimer = Timer("GetWeather()",900000);
+			weatherTimer.start();
+            var clockTimer = Timer("GetClock()",1000);
+            clockTimer.start();
 		});
 		
 	</script>
 	
 	<style type="text/css">
-		
-			/*Demo Styles*/
-            body{ text-align: center; }
+
 			p{ color:#fff; font:90pt "Helvetica Neue", "Helvetica", Arial, sans-serif; text-shadow: #000 0px 1px 0px; float:left; top: 15px; position: relative;
 			 margin-right: 15px;}
 			img#weatherid{ float:left; padding-bottom: 10px;}
 			#content{ position:absolute; bottom:50px; right:50px; background:#111; background:rgba(0,0,0,0.65); text-align:left;  -moz-border-radius:3px; -webkit-border-radius:3px; border-radius: 15px;
 				-moz-box-shadow: 0px 1px 1px #000; -webkit-box-shadow: 0px 1px 1px #000; box-shadow: 0px 1px 1px #000;  overflow: auto; }
-            #clock{ position: absolute; bottom: 50px; }
-			
+            div#clock{ color:#fff; font: 140pt "Helvetica Neue", "Helvetica", Arial, sans-serif; text-shadow: #000 0px 1px 0px;}
+			div#date{ color:#fff; font: 40pt "Helvetica Neue", "Helvetica", Arial, sans-serif; text-align: right; text-shadow: #000 0px 1px 0px;}
+    		div#timeWrapper{  position: absolute; bottom: 50px; margin: 0 auto; }
 	</style>
 	
 </head>
 
 <body>
+<div id="timeWrapper">
     <div id="clock"></div>
+    <div id="date"></div>
+</div>
 	<div id="content">
 		<img id="weatherid" src="img/weather/na.png" width="250"/>
 		<p id="temperature"/>
