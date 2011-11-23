@@ -23,7 +23,7 @@
 	
 	<script type="text/javascript">
 	
-		jQuery(function($){
+        jQuery(function($){
 			$.supersized({
 			
 				//Functionality
@@ -71,11 +71,11 @@
 					
 			}); 
 		});
-		
-		$(function(){
-			
-			$.ajax({
-			    type: "GET",
+    
+        function GetWeather()
+        {
+            $.ajax({
+        	    type: "GET",
 				url: "proxy.php?url="+escape("http://www.yr.no/sted/Sverige/Västra_Götaland/Kungälv/varsel_time_for_time.xml"),
 				dataType: "xml",
 				success: function(xml) {
@@ -84,12 +84,41 @@
 					var temperature = $(currentWeather).find("temperature").attr("value")
 					
 					$("#weatherid").attr("src", "img/weather/"+weatherSymbol+".png");
-					$("#temperature").append(temperature+"°");
+					$("#temperature").text(temperature+"°");
 				},
 				error: function(xml) {
 					
 				} 
 			});
+            
+        }
+        
+        function Timer(fn_tick,tickLength){
+            return {
+                timer:this.timer,
+                started:false,
+                start: function(){
+                   if(!this.started){
+                       var self = this;
+                       this.started = true;
+                       this.timer = setInterval(fn_tick, tickLength);
+                       return this;                
+                   }
+                },
+                stop: function(){
+                   if(this.started){
+                       clearInterval(this.timer);
+                       this.started = false;                
+                    }
+                    
+                    return this;
+                }
+            }
+        }
+		
+		$(function(){
+			Timer(GetWeather(),1800);
+			
 			
 		});
 		
@@ -98,18 +127,20 @@
 	<style type="text/css">
 		
 			/*Demo Styles*/
+            body{ text-align: center; }
 			p{ color:#fff; font:90pt "Helvetica Neue", "Helvetica", Arial, sans-serif; text-shadow: #000 0px 1px 0px; float:left; top: 15px; position: relative;
 			 margin-right: 15px;}
 			img#weatherid{ float:left; padding-bottom: 10px;}
 			#content{ position:absolute; bottom:50px; right:50px; background:#111; background:rgba(0,0,0,0.65); text-align:left;  -moz-border-radius:3px; -webkit-border-radius:3px; border-radius: 15px;
 				-moz-box-shadow: 0px 1px 1px #000; -webkit-box-shadow: 0px 1px 1px #000; box-shadow: 0px 1px 1px #000;  overflow: auto; }
+            #clock{ position: absolute; bottom: 50px; }
 			
 	</style>
 	
 </head>
 
 <body>
-
+    <div id="clock"></div>
 	<div id="content">
 		<img id="weatherid" src="img/weather/na.png" width="250"/>
 		<p id="temperature"/>
