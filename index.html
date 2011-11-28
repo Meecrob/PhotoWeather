@@ -81,9 +81,20 @@
 				success: function(xml) {
 					var currentWeather = $(xml).find("time").first();
 					var weatherSymbol = $(currentWeather).find("symbol").attr("number");
-					var temperature = $(currentWeather).find("temperature").attr("value")
-					
-					$("#weatherid").attr("src", "img/weather/"+weatherSymbol+".png");
+					var temperature = $(currentWeather).find("temperature").attr("value");
+                    var sunrise = new Date($(currentWeather).find("sun").attr("rise"));
+                    var sunset = new Date($(currentWeather).find("sun").attr("set"));
+					var currentTime = new Date();
+                    
+                    if(currentTime > sunrise && currentTime < sunset)
+                    {
+					    $("#weatherid").attr("src", "img/weather/"+weatherSymbol+".png");
+                    }
+                    else
+                    {
+                         $("#weatherid").attr("src", "img/weather/"+weatherSymbol+"n.png");   
+                    }
+                    
 					$("#temperature").text(temperature+"°");
 				},
 				error: function(xml) {
@@ -113,7 +124,7 @@
             var m=today.getMinutes();
             
             $("#clock").text(checkTime(h)+':'+checkTime(m));
-            $("#date").text(today.getDate() +' '+ monthNames[today.getMonth()]);
+            $("#date").text(checkTime(today.getDate()) +' '+ monthNames[today.getMonth()]);
 
         }
         
