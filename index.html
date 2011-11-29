@@ -2,18 +2,10 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
-	<!--
-	Supersized - Fullscreen Background jQuery Plugin
-	Flickr Edition Version 1.1.2
-	www.buildinternet.com/project/supersized
-	
-	By Sam Dunn / One Mighty Roar (www.onemightyroar.com)
-	Released under MIT License / GPL License
-	-->
-
 	<head>
 
-	<title>Supersized - Full Screen Background/Slideshow jQuery Plugin</title>
+	<title>PhotoWeather - Cloud edition</title>
+    
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	
 	<link rel="stylesheet" href="css/supersized.css" type="text/css" media="screen" />
@@ -82,10 +74,9 @@
 					var currentWeather = $(xml).find("time").first();
 					var weatherSymbol = $(currentWeather).find("symbol").attr("number");
 					var temperature = $(currentWeather).find("temperature").attr("value");
-                    var sunrise = new Date($(currentWeather).find("sun").attr("rise"));
-                    var sunset = new Date($(currentWeather).find("sun").attr("set"));
+                    var sunrise = new Date($(xml).find("sun").attr("rise"));
+                    var sunset = new Date($(xml).find("sun").attr("set"));
 					var currentTime = new Date();
-                    
                     if(currentTime > sunrise && currentTime < sunset)
                     {
 					    $("#weatherid").attr("src", "img/weather/"+weatherSymbol+".png");
